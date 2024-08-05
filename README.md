@@ -71,7 +71,7 @@ Please make sure that you are inside the repository and have already activated t
 To run the pipeline, use the following command:
 
 ```bash
-$ python3 pipeline.py
+$ python3 pipeline.py --config pipeline_conf.yml
 ```
 
 The warehouse tables can be found inside the `data/analytics`, `data/datamart`, `data/staging` directory, while the final CSV files can be found inside `data/export/`.
