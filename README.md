@@ -63,28 +63,122 @@ Agriaku-THT/
 └── run.sh                          # Script to run the project
 ```
 
-## Usage
+Here's how you can update the usage instructions to match the structure and setup of your project:
 
-To run the ETL pipeline, follow these steps:
+---
 
-1. **Ingest Data:**
-   - Place the raw data files in the `data/raw` directory.
-   - Run the ingestion script to load the data.
-   ```bash
-   python scripts/ingest.py
-   ```
+### Running the Pipeline on Local Machine
 
-2. **Transform Data:**
-   - Run the transformation script to clean and process the data.
-   ```bash
-   python scripts/transform.py
-   ```
+Please make sure that you are inside the repository and have already activated the environment before running the pipeline. Setup and installation steps can be found above.
 
-3. **Store Data:**
-   - The processed data will be stored in the `data/staging` and `data/datamart` directories.
+To run the pipeline, use the following command:
 
-4. **Additional Information:**
-   - You can find the details of the schema and data structure in the `docs` directory.
+```bash
+$ python3 pipeline.py
+```
+
+The warehouse tables can be found inside the `data/warehouse/` directory, while the final CSV files can be found inside `data/exported-data/`.
+
+```
+.
+├── data
+│   ├── raw
+│   │   ├── course_attendance.csv
+│   │   ├── course.csv
+│   │   ├── enrollment.csv
+│   │   └── schedule.csv
+│   ├── export
+│   │   ├── analytics_attendance_summary_weekly.csv
+│   │   ├── analytics_attendance_weekly.csv
+│   │   ├── dim_course.csv
+│   │   ├── dim_enrollment.csv
+│   │   ├── dim_schedule.csv
+│   │   └── fact_attendance_daily.csv
+│   ├── analytics
+│   │   ├── analytics_attendance_summary_weekly.parquet
+│   │   └── analytics_attendance_weekly.parquet
+│   ├── datamart
+│   │   ├── dim_course.parquet
+│   │   ├── dim_enrollment.parquet
+│   │   ├── dim_schedule.parquet
+│   │   └── fact_attendance_daily.parquet
+│   └── staging
+│       ├── stg_course_attendance.parquet
+│       ├── stg_course.parquet
+│       ├── stg_enrollment.parquet
+│       ├── stg_schedule.parquet
+├── pipeline/
+├── pipeline_conf.yml
+├── Dockerfile
+├── README.md
+├── docker-compose.yml
+├── pipeline.py
+├── requirements.txt
+└── run.sh                         
+```
+
+### Running with Docker
+
+Before running with Docker, please make sure that the datasets are inside the `data/raw/` directory as shown in the directory tree above.
+
+1. **Build Docker Image:**
+   - Make sure Docker is installed on your machine.
+   - Navigate to the project directory and build the Docker image using the prepared script:
+
+     ```bash
+     $ ./docker/build-docker.sh
+     ```
+
+2. **Run Docker Container:**
+   - Use the provided `run.sh` script to run the Docker container and execute the ETL pipeline:
+
+     ```bash
+     $ ./docker/run-docker.sh
+     ```
+
+You should be able to find the results inside the `docker_volume/` directory that has been created by the run script.
+
+```
+.
+├── data
+│   ├── raw
+│   │   ├── course_attendance.csv
+│   │   ├── course.csv
+│   │   ├── enrollment.csv
+│   │   └── schedule.csv
+├── docker_volume/
+│   ├── exported-data
+│   │   ├── analytics_attendance_summary_weekly.csv
+│   │   ├── analytics_attendance_weekly.csv
+│   │   ├── dim_course.csv
+│   │   ├── dim_enrollment.csv
+│   │   ├── dim_schedule.csv
+│   │   └── fact_attendance_daily.csv
+│   ├── warehouse
+│   │   ├── analytics
+│   │   │   ├── analytics_attendance_summary_weekly.parquet
+│   │   │   └── analytics_attendance_weekly.parquet
+│   │   ├── datamart
+│   │   │   ├── dim_course.parquet
+│   │   │   ├── dim_enrollment.parquet
+│   │   │   ├── dim_schedule.parquet
+│   │   │   └── fact_attendance_daily.parquet
+│   │   └── staging
+│   │       ├── stg_course_attendance.parquet
+│   │       ├── stg_course.parquet
+│   │       ├── stg_enrollment.parquet
+│   │       └── stg_schedule.parquet
+├── docker/
+├── pipeline/
+├── venv/
+├── pipeline_conf.yml
+├── README.md
+├── LICENSE
+├── requirements.txt
+└── run_pipeline.py
+```
+
+These instructions provide a clear guide for running the ETL pipeline both on a local machine and within a Docker container, ensuring users can choose their preferred method.
 
 ## License
 
