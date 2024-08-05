@@ -60,22 +60,31 @@ To run the ETL pipeline, follow these steps:
 ```
 Agriaku-THT/
 ├── data/
-│   ├── raw/                # Raw data files
-│   ├── staging/            # Intermediate data
-│   └── datamart/           # Final data warehouse files
-├── logs/                   # Logs for pipeline execution
+│   ├── raw/                        # Raw data files
+│   ├── export/                     # Exported data files
+├── logs/                           # Logs for pipeline execution
 ├── pipeline/
-│   ├── __init__.py         # Package initialization
-│   ├── ingest.py           # Script for data ingestion
-│   ├── transform.py        # Script for data transformation
-│   ├── load.py             # Script for loading data into the warehouse
-│   └── pipeline_conf.yml   # Configuration for the pipeline
-├── Dockerfile              # Docker configuration
-├── README.md               # Project documentation
-├── docker-compose.yml      # Docker Compose configuration
-├── pipeline.py             # Main pipeline script
-├── requirements.txt        # Python package dependencies
-└── run.sh                  # Script to run the project
+│   ├── jobs/                       # ETL job scripts
+│   │   ├── create_attendance_fact.py     # Create attendance fact table
+│   │   ├── create_course_dimension.py    # Create course dimension table
+│   │   ├── create_enrollment_dimension.py # Create enrollment dimension table
+│   │   ├── create_schedule_dimension.py  # Create schedule dimension table
+│   │   ├── export_data.py                # Export data to files
+│   │   ├── ingest_data.py                # Ingest raw data
+│   │   ├── weekly_attendance_analysis.py # Analyze weekly attendance
+│   │   ├── weekly_attendance_summary.py  # Summarize weekly attendance
+│   ├── utils/                      # Utility functions
+│   │   ├── config.py               # Configuration utilities
+│   │   ├── file_utils.py           # File handling utilities
+│   │   ├── logger.py               # Logging utilities
+│   └── __init__.py                 # Package initialization
+├── pipeline_conf.yml               # Configuration for the pipeline
+├── Dockerfile                      # Docker configuration
+├── README.md                       # Project documentation
+├── docker-compose.yml              # Docker Compose configuration
+├── pipeline.py                     # Main pipeline script
+├── requirements.txt                # Python package dependencies
+└── run.sh                          # Script to run the project
 ```
 
 ## Contributing
