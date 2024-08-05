@@ -60,16 +60,22 @@ To run the ETL pipeline, follow these steps:
 ```
 Agriaku-THT/
 ├── data/
-│   ├── raw/          # Raw data files
-│   ├── staging/      # Intermediate data
-│   └── datamart/     # Final data warehouse files
-├── scripts/
-│   ├── ingest.py     # Script for data ingestion
-│   ├── transform.py  # Script for data transformation
-│   └── ...           # Other scripts
-├── docs/             # Documentation
-├── requirements.txt  # Python package dependencies
-└── README.md         # Project documentation
+│   ├── raw/                # Raw data files
+│   ├── staging/            # Intermediate data
+│   └── datamart/           # Final data warehouse files
+├── logs/                   # Logs for pipeline execution
+├── pipeline/
+│   ├── __init__.py         # Package initialization
+│   ├── ingest.py           # Script for data ingestion
+│   ├── transform.py        # Script for data transformation
+│   ├── load.py             # Script for loading data into the warehouse
+│   └── pipeline_conf.yml   # Configuration for the pipeline
+├── Dockerfile              # Docker configuration
+├── README.md               # Project documentation
+├── docker-compose.yml      # Docker Compose configuration
+├── pipeline.py             # Main pipeline script
+├── requirements.txt        # Python package dependencies
+└── run.sh                  # Script to run the project
 ```
 
 ## Contributing
