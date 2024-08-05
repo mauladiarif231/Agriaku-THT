@@ -1,0 +1,564 @@
+2024-08-05 00:35:26,579 [INFO] [pipeline]  Pipeline process started.
+2024-08-05 00:35:26,580 [INFO] [pipeline]  Loading configuration
+2024-08-05 00:35:26,591 [INFO] [pipeline]  Running pipeline with the following config
+2024-08-05 00:35:26,592 [INFO] [config]  WAREHOUSE_PATH: data/datamart
+2024-08-05 00:35:26,593 [INFO] [config]  EXPORT_DATA_PATH: data/export
+2024-08-05 00:35:26,594 [INFO] [config]  RAW_DATA_PATH: data/raw
+2024-08-05 00:35:26,595 [INFO] [config]  FOLDER_DATA: data
+2024-08-05 00:35:26,595 [INFO] [pipeline]  Preparing required directories
+2024-08-05 00:35:26,628 [INFO] [pipeline]  Raw data directory: data/raw
+2024-08-05 00:35:26,630 [INFO] [pipeline]  Export data directory: data/export
+2024-08-05 00:35:26,656 [INFO] [ingest_data]  Ingesting data from course.csv to Parquet.
+2024-08-05 00:35:26,837 [INFO] [ingest_data]  Data ingested to data/staging/stg_course.parquet
+2024-08-05 00:35:26,838 [INFO] [ingest_data]  Ingesting data from course_attendance.csv to Parquet.
+2024-08-05 00:35:26,890 [INFO] [ingest_data]  Data ingested to data/staging/stg_course_attendance.parquet
+2024-08-05 00:35:26,892 [INFO] [ingest_data]  Ingesting data from enrollment.csv to Parquet.
+2024-08-05 00:35:27,046 [INFO] [ingest_data]  Data ingested to data/staging/stg_enrollment.parquet
+2024-08-05 00:35:27,048 [INFO] [ingest_data]  Ingesting data from schedule.csv to Parquet.
+2024-08-05 00:35:27,089 [INFO] [ingest_data]  Data ingested to data/staging/stg_schedule.parquet
+2024-08-05 00:35:27,090 [INFO] [create_course_dimension]  Creating course dimension from data/staging/stg_course.parquet.
+2024-08-05 00:35:27,162 [INFO] [create_course_dimension]  Course dimension written to data/datamart/dim_course.parquet
+2024-08-05 00:35:27,163 [INFO] [create_schedule_dimension]  Creating schedule dimension from data/datamart/dim_schedule.parquet.
+2024-08-05 00:35:27,221 [INFO] [create_schedule_dimension]  Schedule dimension written to data/datamart/dim_schedule.parquet
+2024-08-05 00:35:27,222 [INFO] [create_enrollment_dimension]  Creating enrollment dimension from data/staging/stg_enrollment.parquet.
+2024-08-05 00:35:27,332 [INFO] [create_enrollment_dimension]  Enrollment dimension written to data/datamart/dim_enrollment.parquet
+2024-08-05 00:35:27,333 [INFO] [create_attendance_fact]  Creating attendance fact table from data/staging/stg_course_attendance.parquet.
+2024-08-05 00:35:27,424 [INFO] [create_attendance_fact]  Attendance fact table written to data/datamart/fact_attendance_daily.parquet
+2024-08-05 00:35:27,425 [INFO] [weekly_attendance_analysis]  Analyzing weekly attendance.
+2024-08-05 00:35:27,511 [INFO] [weekly_attendance_analysis]  Attendance DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT'],
+      dtype='object')
+2024-08-05 00:35:27,512 [INFO] [weekly_attendance_analysis]  Course DataFrame columns: Index(['COURSE_ID', 'COURSE_NAME'], dtype='object')
+2024-08-05 00:35:27,513 [INFO] [weekly_attendance_analysis]  Schedule DataFrame columns: Index(['SCHEDULE_ID', 'COURSE_ID', 'LECTURER_ID', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS'],
+      dtype='object')
+2024-08-05 00:35:27,514 [INFO] [weekly_attendance_analysis]  Enrollment DataFrame columns: Index(['ENROLLMENT_ID', 'SCHEDULE_ID', 'STUDENT_ID', 'LECTURER_ID',
+       'COURSE_ID', 'ACADEMIC_YEAR', 'SEMESTER_ID', 'ENROLL_DT'],
+      dtype='object')
+2024-08-05 00:35:27,517 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_START_DT is missing in attendance_df
+2024-08-05 00:35:27,518 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_END_DT is missing in attendance_df
+2024-08-05 00:35:27,540 [INFO] [weekly_attendance_analysis]  Merged DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT',
+       'COURSE_ID_schedule', 'LECTURER_ID_schedule', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS', 'SCHEDULE_ID_enrollment',
+       'STUDENT_ID_enrollment', 'LECTURER_ID_enrollment',
+       'COURSE_ID_enrollment', 'ACADEMIC_YEAR', 'SEMESTER_ID_enrollment',
+       'ENROLL_DT', 'COURSE_NAME'],
+      dtype='object')
+2024-08-05 00:35:27,660 [INFO] [weekly_attendance_analysis]  Weekly attendance analysis written to data/analytics/analytics_attendance_weekly.parquet
+2024-08-05 00:35:27,662 [INFO] [weekly_attendance_summary]  Summarizing weekly attendance from data/analytics/analytics_attendance_weekly.parquet.
+2024-08-05 00:35:27,709 [INFO] [weekly_attendance_summary]  Loaded DataFrame with columns: Index(['STUDENT_ID', 'SCHEDULE_ID', 'ENROLLMENT_ID', 'WEEK_ID', 'LECTURER_ID',
+       'SEMESTER_ID', 'COURSE_ID', 'COURSE_NAME', 'ACADEMIC_YEAR', 'ENROLL_DT',
+       'SCHEDULE_START_DT', 'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS',
+       'ATTENDANCE_EXPECTED', 'ATTENDANCE_SUM'],
+      dtype='object')
+2024-08-05 00:35:27,765 [INFO] [weekly_attendance_summary]  DataFrame preview:
+   STUDENT_ID  SCHEDULE_ID  ...  ATTENDANCE_EXPECTED  ATTENDANCE_SUM
+0           1            2  ...                    2               2
+1           1            2  ...                    2               2
+2           1            2  ...                    2               2
+3           1            2  ...                    2               2
+4           1            2  ...                    2               2
+
+[5 rows x 15 columns]
+2024-08-05 00:35:27,817 [INFO] [weekly_attendance_summary]  Aggregated DataFrame preview:
+   SEMESTER_ID  WEEK_ID  ...  ATTENDANCE_SUM ATTENDANCE_EXPECTED
+0            1        1  ...               5                   6
+1            1        1  ...               6                   6
+2            1        1  ...               4                   4
+3            1        1  ...               2                   2
+4            1        2  ...               6                   6
+
+[5 rows x 6 columns]
+2024-08-05 00:35:27,852 [INFO] [weekly_attendance_summary]  Filtered DataFrame with selected columns:
+   SEMESTER_ID  ...  ATTENDANCE_PCT
+0            1  ...       83.333333
+1            1  ...      100.000000
+2            1  ...      100.000000
+3            1  ...      100.000000
+4            1  ...      100.000000
+
+[5 rows x 4 columns]
+2024-08-05 00:35:27,896 [INFO] [weekly_attendance_summary]  Weekly attendance summary written to data/analytics/analytics_attendance_summary_weekly.parquet
+2024-08-05 00:35:27,897 [INFO] [export_data]  Exporting data from dim_course.parquet to CSV.
+2024-08-05 00:35:27,947 [INFO] [export_data]  Data exported to data/export/dim_course.csv
+2024-08-05 00:35:27,948 [INFO] [export_data]  Exporting data from dim_schedule.parquet to CSV.
+2024-08-05 00:35:27,998 [INFO] [export_data]  Data exported to data/export/dim_schedule.csv
+2024-08-05 00:35:28,000 [INFO] [export_data]  Exporting data from dim_enrollment.parquet to CSV.
+2024-08-05 00:35:28,056 [INFO] [export_data]  Data exported to data/export/dim_enrollment.csv
+2024-08-05 00:35:28,057 [INFO] [export_data]  Exporting data from fact_attendance_daily.parquet to CSV.
+2024-08-05 00:35:28,112 [INFO] [export_data]  Data exported to data/export/fact_attendance_daily.csv
+2024-08-05 00:35:28,113 [INFO] [export_data]  Exporting data from analytics_attendance_weekly.parquet to CSV.
+2024-08-05 00:35:28,167 [INFO] [export_data]  Data exported to data/export/analytics_attendance_weekly.csv
+2024-08-05 00:35:28,168 [INFO] [export_data]  Exporting data from analytics_attendance_summary_weekly.parquet to CSV.
+2024-08-05 00:35:28,202 [INFO] [export_data]  Data exported to data/export/analytics_attendance_summary_weekly.csv
+2024-08-05 00:37:09,047 [INFO] [pipeline]  Pipeline process started.
+2024-08-05 00:37:09,048 [INFO] [pipeline]  Loading configuration
+2024-08-05 00:37:09,055 [INFO] [pipeline]  Running pipeline with the following config
+2024-08-05 00:37:09,056 [INFO] [config]  WAREHOUSE_PATH: data/datamart
+2024-08-05 00:37:09,056 [INFO] [config]  EXPORT_DATA_PATH: data/export
+2024-08-05 00:37:09,057 [INFO] [config]  RAW_DATA_PATH: data/raw
+2024-08-05 00:37:09,058 [INFO] [config]  FOLDER_DATA: data
+2024-08-05 00:37:09,059 [INFO] [pipeline]  Preparing required directories
+2024-08-05 00:37:09,089 [INFO] [pipeline]  Raw data directory: data/raw
+2024-08-05 00:37:09,090 [INFO] [pipeline]  Export data directory: data/export
+2024-08-05 00:37:09,115 [INFO] [ingest_data]  Ingesting data from course.csv to Parquet.
+2024-08-05 00:37:09,299 [INFO] [ingest_data]  Data ingested to data/staging/stg_course.parquet
+2024-08-05 00:37:09,300 [INFO] [ingest_data]  Ingesting data from course_attendance.csv to Parquet.
+2024-08-05 00:37:09,344 [INFO] [ingest_data]  Data ingested to data/staging/stg_course_attendance.parquet
+2024-08-05 00:37:09,345 [INFO] [ingest_data]  Ingesting data from enrollment.csv to Parquet.
+2024-08-05 00:37:09,405 [INFO] [ingest_data]  Data ingested to data/staging/stg_enrollment.parquet
+2024-08-05 00:37:09,405 [INFO] [ingest_data]  Ingesting data from schedule.csv to Parquet.
+2024-08-05 00:37:09,448 [INFO] [ingest_data]  Data ingested to data/staging/stg_schedule.parquet
+2024-08-05 00:37:09,450 [INFO] [create_course_dimension]  Creating course dimension from data/staging/stg_course.parquet.
+2024-08-05 00:37:09,500 [INFO] [create_course_dimension]  Course dimension written to data/datamart/dim_course.parquet
+2024-08-05 00:37:09,501 [INFO] [create_schedule_dimension]  Creating schedule dimension from data/datamart/dim_schedule.parquet.
+2024-08-05 00:37:09,576 [INFO] [create_schedule_dimension]  Schedule dimension written to data/datamart/dim_schedule.parquet
+2024-08-05 00:37:09,577 [INFO] [create_enrollment_dimension]  Creating enrollment dimension from data/staging/stg_enrollment.parquet.
+2024-08-05 00:37:09,672 [INFO] [create_enrollment_dimension]  Enrollment dimension written to data/datamart/dim_enrollment.parquet
+2024-08-05 00:37:09,673 [INFO] [create_attendance_fact]  Creating attendance fact table from data/staging/stg_course_attendance.parquet.
+2024-08-05 00:37:09,768 [INFO] [create_attendance_fact]  Attendance fact table written to data/datamart/fact_attendance_daily.parquet
+2024-08-05 00:37:09,769 [INFO] [weekly_attendance_analysis]  Analyzing weekly attendance.
+2024-08-05 00:37:09,843 [INFO] [weekly_attendance_analysis]  Attendance DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT'],
+      dtype='object')
+2024-08-05 00:37:09,844 [INFO] [weekly_attendance_analysis]  Course DataFrame columns: Index(['COURSE_ID', 'COURSE_NAME'], dtype='object')
+2024-08-05 00:37:09,846 [INFO] [weekly_attendance_analysis]  Schedule DataFrame columns: Index(['SCHEDULE_ID', 'COURSE_ID', 'LECTURER_ID', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS'],
+      dtype='object')
+2024-08-05 00:37:09,848 [INFO] [weekly_attendance_analysis]  Enrollment DataFrame columns: Index(['ENROLLMENT_ID', 'SCHEDULE_ID', 'STUDENT_ID', 'LECTURER_ID',
+       'COURSE_ID', 'ACADEMIC_YEAR', 'SEMESTER_ID', 'ENROLL_DT'],
+      dtype='object')
+2024-08-05 00:37:09,853 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_START_DT is missing in attendance_df
+2024-08-05 00:37:09,854 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_END_DT is missing in attendance_df
+2024-08-05 00:37:09,879 [INFO] [weekly_attendance_analysis]  Merged DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT',
+       'COURSE_ID_schedule', 'LECTURER_ID_schedule', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS', 'SCHEDULE_ID_enrollment',
+       'STUDENT_ID_enrollment', 'LECTURER_ID_enrollment',
+       'COURSE_ID_enrollment', 'ACADEMIC_YEAR', 'SEMESTER_ID_enrollment',
+       'ENROLL_DT', 'COURSE_NAME'],
+      dtype='object')
+2024-08-05 00:37:09,961 [INFO] [weekly_attendance_analysis]  Weekly attendance analysis written to data/analytics/analytics_attendance_weekly.parquet
+2024-08-05 00:37:09,962 [INFO] [weekly_attendance_summary]  Summarizing weekly attendance from data/analytics/analytics_attendance_weekly.parquet.
+2024-08-05 00:37:09,992 [INFO] [weekly_attendance_summary]  Loaded DataFrame with columns: Index(['STUDENT_ID', 'SCHEDULE_ID', 'ENROLLMENT_ID', 'WEEK_ID', 'LECTURER_ID',
+       'SEMESTER_ID', 'COURSE_ID', 'COURSE_NAME', 'ACADEMIC_YEAR', 'ENROLL_DT',
+       'SCHEDULE_START_DT', 'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS',
+       'ATTENDANCE_EXPECTED', 'ATTENDANCE_SUM'],
+      dtype='object')
+2024-08-05 00:37:10,034 [INFO] [weekly_attendance_summary]  DataFrame preview:
+   STUDENT_ID  SCHEDULE_ID  ...  ATTENDANCE_EXPECTED  ATTENDANCE_SUM
+0           1            2  ...                    2               2
+1           1            2  ...                    2               2
+2           1            2  ...                    2               2
+3           1            2  ...                    2               2
+4           1            2  ...                    2               2
+
+[5 rows x 15 columns]
+2024-08-05 00:37:10,061 [INFO] [weekly_attendance_summary]  Aggregated DataFrame preview:
+   SEMESTER_ID  WEEK_ID  ...  ATTENDANCE_SUM ATTENDANCE_EXPECTED
+0            1        1  ...               5                   6
+1            1        1  ...               6                   6
+2            1        1  ...               4                   4
+3            1        1  ...               2                   2
+4            1        2  ...               6                   6
+
+[5 rows x 6 columns]
+2024-08-05 00:37:10,081 [INFO] [weekly_attendance_summary]  Filtered DataFrame with selected columns:
+   SEMESTER_ID  ...  ATTENDANCE_PCT
+0            1  ...       83.333333
+1            1  ...      100.000000
+2            1  ...      100.000000
+3            1  ...      100.000000
+4            1  ...      100.000000
+
+[5 rows x 4 columns]
+2024-08-05 00:37:10,113 [INFO] [weekly_attendance_summary]  Weekly attendance summary written to data/analytics/analytics_attendance_summary_weekly.parquet
+2024-08-05 00:37:10,115 [INFO] [export_data]  Exporting data from dim_course.parquet to CSV.
+2024-08-05 00:37:10,146 [INFO] [export_data]  Data exported to data/export/dim_course.csv
+2024-08-05 00:37:10,147 [INFO] [export_data]  Exporting data from dim_schedule.parquet to CSV.
+2024-08-05 00:37:10,184 [INFO] [export_data]  Data exported to data/export/dim_schedule.csv
+2024-08-05 00:37:10,185 [INFO] [export_data]  Exporting data from dim_enrollment.parquet to CSV.
+2024-08-05 00:37:10,219 [INFO] [export_data]  Data exported to data/export/dim_enrollment.csv
+2024-08-05 00:37:10,220 [INFO] [export_data]  Exporting data from fact_attendance_daily.parquet to CSV.
+2024-08-05 00:37:10,262 [INFO] [export_data]  Data exported to data/export/fact_attendance_daily.csv
+2024-08-05 00:37:10,263 [INFO] [export_data]  Exporting data from analytics_attendance_weekly.parquet to CSV.
+2024-08-05 00:37:10,321 [INFO] [export_data]  Data exported to data/export/analytics_attendance_weekly.csv
+2024-08-05 00:37:10,323 [INFO] [export_data]  Exporting data from analytics_attendance_summary_weekly.parquet to CSV.
+2024-08-05 00:37:10,370 [INFO] [export_data]  Data exported to data/export/analytics_attendance_summary_weekly.csv
+2024-08-05 00:58:21,635 [INFO] [pipeline]  Pipeline process started.
+2024-08-05 00:58:21,636 [INFO] [pipeline]  Loading configuration
+2024-08-05 00:58:21,643 [INFO] [pipeline]  Running pipeline with the following config
+2024-08-05 00:58:21,644 [INFO] [config]  WAREHOUSE_PATH: data/datamart
+2024-08-05 00:58:21,644 [INFO] [config]  EXPORT_DATA_PATH: data/export
+2024-08-05 00:58:21,645 [INFO] [config]  RAW_DATA_PATH: data/raw
+2024-08-05 00:58:21,646 [INFO] [config]  FOLDER_DATA: data
+2024-08-05 00:58:21,647 [INFO] [pipeline]  Preparing required directories
+2024-08-05 00:58:21,673 [INFO] [pipeline]  Raw data directory: data/raw
+2024-08-05 00:58:21,674 [INFO] [pipeline]  Export data directory: data/export
+2024-08-05 00:58:21,699 [INFO] [ingest_data]  Ingesting data from course.csv to Parquet.
+2024-08-05 00:58:21,863 [INFO] [ingest_data]  Data ingested to data/staging/stg_course.parquet
+2024-08-05 00:58:21,864 [INFO] [ingest_data]  Ingesting data from course_attendance.csv to Parquet.
+2024-08-05 00:58:21,895 [INFO] [ingest_data]  Data ingested to data/staging/stg_course_attendance.parquet
+2024-08-05 00:58:21,896 [INFO] [ingest_data]  Ingesting data from enrollment.csv to Parquet.
+2024-08-05 00:58:21,943 [INFO] [ingest_data]  Data ingested to data/staging/stg_enrollment.parquet
+2024-08-05 00:58:21,944 [INFO] [ingest_data]  Ingesting data from schedule.csv to Parquet.
+2024-08-05 00:58:21,986 [INFO] [ingest_data]  Data ingested to data/staging/stg_schedule.parquet
+2024-08-05 00:58:21,988 [INFO] [create_course_dimension]  Creating course dimension from data/staging/stg_course.parquet.
+2024-08-05 00:58:22,049 [INFO] [create_course_dimension]  Course dimension written to data/datamart/dim_course.parquet
+2024-08-05 00:58:22,050 [INFO] [create_schedule_dimension]  Creating schedule dimension from data/datamart/dim_schedule.parquet.
+2024-08-05 00:58:22,107 [INFO] [create_schedule_dimension]  Schedule dimension written to data/datamart/dim_schedule.parquet
+2024-08-05 00:58:22,108 [INFO] [create_enrollment_dimension]  Creating enrollment dimension from data/staging/stg_enrollment.parquet.
+2024-08-05 00:58:22,210 [INFO] [create_enrollment_dimension]  Enrollment dimension written to data/datamart/dim_enrollment.parquet
+2024-08-05 00:58:22,211 [INFO] [create_attendance_fact]  Creating attendance fact table from data/staging/stg_course_attendance.parquet.
+2024-08-05 00:58:22,295 [INFO] [create_attendance_fact]  Attendance fact table written to data/datamart/fact_attendance_daily.parquet
+2024-08-05 00:58:22,296 [INFO] [weekly_attendance_analysis]  Analyzing weekly attendance.
+2024-08-05 00:58:22,382 [INFO] [weekly_attendance_analysis]  Attendance DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT'],
+      dtype='object')
+2024-08-05 00:58:22,383 [INFO] [weekly_attendance_analysis]  Course DataFrame columns: Index(['COURSE_ID', 'COURSE_NAME'], dtype='object')
+2024-08-05 00:58:22,385 [INFO] [weekly_attendance_analysis]  Schedule DataFrame columns: Index(['SCHEDULE_ID', 'COURSE_ID', 'LECTURER_ID', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS'],
+      dtype='object')
+2024-08-05 00:58:22,386 [INFO] [weekly_attendance_analysis]  Enrollment DataFrame columns: Index(['ENROLLMENT_ID', 'SCHEDULE_ID', 'STUDENT_ID', 'LECTURER_ID',
+       'COURSE_ID', 'ACADEMIC_YEAR', 'SEMESTER_ID', 'ENROLL_DT'],
+      dtype='object')
+2024-08-05 00:58:22,390 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_START_DT is missing in attendance_df
+2024-08-05 00:58:22,391 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_END_DT is missing in attendance_df
+2024-08-05 00:58:22,413 [INFO] [weekly_attendance_analysis]  Merged DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT',
+       'COURSE_ID_schedule', 'LECTURER_ID_schedule', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS', 'SCHEDULE_ID_enrollment',
+       'STUDENT_ID_enrollment', 'LECTURER_ID_enrollment',
+       'COURSE_ID_enrollment', 'ACADEMIC_YEAR', 'SEMESTER_ID_enrollment',
+       'ENROLL_DT', 'COURSE_NAME'],
+      dtype='object')
+2024-08-05 00:58:22,521 [INFO] [weekly_attendance_analysis]  Weekly attendance analysis written to data/analytics/analytics_attendance_weekly.parquet
+2024-08-05 00:58:22,524 [INFO] [weekly_attendance_summary]  Summarizing weekly attendance from data/analytics/analytics_attendance_weekly.parquet.
+2024-08-05 00:58:22,550 [INFO] [weekly_attendance_summary]  Loaded DataFrame with columns: Index(['STUDENT_ID', 'SCHEDULE_ID', 'ENROLLMENT_ID', 'WEEK_ID', 'LECTURER_ID',
+       'SEMESTER_ID', 'COURSE_ID', 'COURSE_NAME', 'ACADEMIC_YEAR', 'ENROLL_DT',
+       'SCHEDULE_START_DT', 'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS',
+       'ATTENDANCE_EXPECTED', 'ATTENDANCE_SUM'],
+      dtype='object')
+2024-08-05 00:58:22,594 [INFO] [weekly_attendance_summary]  DataFrame preview:
+   STUDENT_ID  SCHEDULE_ID  ...  ATTENDANCE_EXPECTED  ATTENDANCE_SUM
+0           1            2  ...                    2               2
+1           1            2  ...                    2               2
+2           1            2  ...                    2               2
+3           1            2  ...                    2               2
+4           1            2  ...                    2               2
+
+[5 rows x 15 columns]
+2024-08-05 00:58:22,627 [INFO] [weekly_attendance_summary]  Aggregated DataFrame preview:
+   SEMESTER_ID  WEEK_ID  ...  ATTENDANCE_SUM ATTENDANCE_EXPECTED
+0            1        1  ...               5                   6
+1            1        1  ...               6                   6
+2            1        1  ...               4                   4
+3            1        1  ...               2                   2
+4            1        2  ...               6                   6
+
+[5 rows x 6 columns]
+2024-08-05 00:58:22,647 [INFO] [weekly_attendance_summary]  Filtered DataFrame with selected columns:
+   SEMESTER_ID  ...  ATTENDANCE_PCT
+0            1  ...       83.333333
+1            1  ...      100.000000
+2            1  ...      100.000000
+3            1  ...      100.000000
+4            1  ...      100.000000
+
+[5 rows x 4 columns]
+2024-08-05 00:58:22,685 [INFO] [weekly_attendance_summary]  Weekly attendance summary written to data/analytics/analytics_attendance_summary_weekly.parquet
+2024-08-05 00:58:22,688 [INFO] [export_data]  Exporting data from dim_course.parquet to CSV.
+2024-08-05 00:58:22,725 [INFO] [export_data]  Data exported to data/export/dim_course.csv
+2024-08-05 00:58:22,726 [INFO] [export_data]  Exporting data from dim_schedule.parquet to CSV.
+2024-08-05 00:58:22,769 [INFO] [export_data]  Data exported to data/export/dim_schedule.csv
+2024-08-05 00:58:22,770 [INFO] [export_data]  Exporting data from dim_enrollment.parquet to CSV.
+2024-08-05 00:58:22,809 [INFO] [export_data]  Data exported to data/export/dim_enrollment.csv
+2024-08-05 00:58:22,810 [INFO] [export_data]  Exporting data from fact_attendance_daily.parquet to CSV.
+2024-08-05 00:58:22,852 [INFO] [export_data]  Data exported to data/export/fact_attendance_daily.csv
+2024-08-05 00:58:22,853 [INFO] [export_data]  Exporting data from analytics_attendance_weekly.parquet to CSV.
+2024-08-05 00:58:22,899 [INFO] [export_data]  Data exported to data/export/analytics_attendance_weekly.csv
+2024-08-05 00:58:22,901 [INFO] [export_data]  Exporting data from analytics_attendance_summary_weekly.parquet to CSV.
+2024-08-05 00:58:22,939 [INFO] [export_data]  Data exported to data/export/analytics_attendance_summary_weekly.csv
+2024-08-05 00:59:32,930 [INFO] [pipeline]  Pipeline process started.
+2024-08-05 00:59:32,931 [INFO] [pipeline]  Loading configuration
+2024-08-05 00:59:32,937 [INFO] [pipeline]  Running pipeline with the following config
+2024-08-05 00:59:32,937 [INFO] [config]  WAREHOUSE_PATH: data/datamart
+2024-08-05 00:59:32,938 [INFO] [config]  EXPORT_DATA_PATH: data/export
+2024-08-05 00:59:32,939 [INFO] [config]  RAW_DATA_PATH: data/raw
+2024-08-05 00:59:32,940 [INFO] [config]  FOLDER_DATA: data
+2024-08-05 00:59:32,940 [INFO] [pipeline]  Preparing required directories
+2024-08-05 00:59:32,959 [INFO] [pipeline]  Raw data directory: data/raw
+2024-08-05 00:59:32,960 [INFO] [pipeline]  Export data directory: data/export
+2024-08-05 00:59:32,982 [INFO] [ingest_data]  Ingesting data from course.csv to Parquet.
+2024-08-05 00:59:33,187 [INFO] [ingest_data]  Data ingested to data/staging/stg_course.parquet
+2024-08-05 00:59:33,187 [INFO] [ingest_data]  Ingesting data from course_attendance.csv to Parquet.
+2024-08-05 00:59:33,219 [INFO] [ingest_data]  Data ingested to data/staging/stg_course_attendance.parquet
+2024-08-05 00:59:33,219 [INFO] [ingest_data]  Ingesting data from enrollment.csv to Parquet.
+2024-08-05 00:59:33,254 [INFO] [ingest_data]  Data ingested to data/staging/stg_enrollment.parquet
+2024-08-05 00:59:33,257 [INFO] [ingest_data]  Ingesting data from schedule.csv to Parquet.
+2024-08-05 00:59:33,299 [INFO] [ingest_data]  Data ingested to data/staging/stg_schedule.parquet
+2024-08-05 00:59:33,300 [INFO] [create_course_dimension]  Creating course dimension from data/staging/stg_course.parquet.
+2024-08-05 00:59:33,352 [INFO] [create_course_dimension]  Course dimension written to data/datamart/dim_course.parquet
+2024-08-05 00:59:33,353 [INFO] [create_schedule_dimension]  Creating schedule dimension from data/datamart/dim_schedule.parquet.
+2024-08-05 00:59:33,437 [INFO] [create_schedule_dimension]  Schedule dimension written to data/datamart/dim_schedule.parquet
+2024-08-05 00:59:33,438 [INFO] [create_enrollment_dimension]  Creating enrollment dimension from data/staging/stg_enrollment.parquet.
+2024-08-05 00:59:33,568 [INFO] [create_enrollment_dimension]  Enrollment dimension written to data/datamart/dim_enrollment.parquet
+2024-08-05 00:59:33,569 [INFO] [create_attendance_fact]  Creating attendance fact table from data/staging/stg_course_attendance.parquet.
+2024-08-05 00:59:33,677 [INFO] [create_attendance_fact]  Attendance fact table written to data/datamart/fact_attendance_daily.parquet
+2024-08-05 00:59:33,679 [INFO] [weekly_attendance_analysis]  Analyzing weekly attendance.
+2024-08-05 00:59:33,781 [INFO] [weekly_attendance_analysis]  Attendance DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT'],
+      dtype='object')
+2024-08-05 00:59:33,783 [INFO] [weekly_attendance_analysis]  Course DataFrame columns: Index(['COURSE_ID', 'COURSE_NAME'], dtype='object')
+2024-08-05 00:59:33,784 [INFO] [weekly_attendance_analysis]  Schedule DataFrame columns: Index(['SCHEDULE_ID', 'COURSE_ID', 'LECTURER_ID', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS'],
+      dtype='object')
+2024-08-05 00:59:33,786 [INFO] [weekly_attendance_analysis]  Enrollment DataFrame columns: Index(['ENROLLMENT_ID', 'SCHEDULE_ID', 'STUDENT_ID', 'LECTURER_ID',
+       'COURSE_ID', 'ACADEMIC_YEAR', 'SEMESTER_ID', 'ENROLL_DT'],
+      dtype='object')
+2024-08-05 00:59:33,791 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_START_DT is missing in attendance_df
+2024-08-05 00:59:33,792 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_END_DT is missing in attendance_df
+2024-08-05 00:59:33,813 [INFO] [weekly_attendance_analysis]  Merged DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT',
+       'COURSE_ID_schedule', 'LECTURER_ID_schedule', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS', 'SCHEDULE_ID_enrollment',
+       'STUDENT_ID_enrollment', 'LECTURER_ID_enrollment',
+       'COURSE_ID_enrollment', 'ACADEMIC_YEAR', 'SEMESTER_ID_enrollment',
+       'ENROLL_DT', 'COURSE_NAME'],
+      dtype='object')
+2024-08-05 00:59:33,920 [INFO] [weekly_attendance_analysis]  Weekly attendance analysis written to data/analytics/analytics_attendance_weekly.parquet
+2024-08-05 00:59:33,921 [INFO] [weekly_attendance_summary]  Summarizing weekly attendance from data/analytics/analytics_attendance_weekly.parquet.
+2024-08-05 00:59:33,957 [INFO] [weekly_attendance_summary]  Loaded DataFrame with columns: Index(['STUDENT_ID', 'SCHEDULE_ID', 'ENROLLMENT_ID', 'WEEK_ID', 'LECTURER_ID',
+       'SEMESTER_ID', 'COURSE_ID', 'COURSE_NAME', 'ACADEMIC_YEAR', 'ENROLL_DT',
+       'SCHEDULE_START_DT', 'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS',
+       'ATTENDANCE_EXPECTED', 'ATTENDANCE_SUM'],
+      dtype='object')
+2024-08-05 00:59:34,019 [INFO] [weekly_attendance_summary]  DataFrame preview:
+   STUDENT_ID  SCHEDULE_ID  ...  ATTENDANCE_EXPECTED  ATTENDANCE_SUM
+0           1            2  ...                    2               2
+1           1            2  ...                    2               2
+2           1            2  ...                    2               2
+3           1            2  ...                    2               2
+4           1            2  ...                    2               2
+
+[5 rows x 15 columns]
+2024-08-05 00:59:34,069 [INFO] [weekly_attendance_summary]  Aggregated DataFrame preview:
+   SEMESTER_ID  WEEK_ID  ...  ATTENDANCE_SUM ATTENDANCE_EXPECTED
+0            1        1  ...               5                   6
+1            1        1  ...               6                   6
+2            1        1  ...               4                   4
+3            1        1  ...               2                   2
+4            1        2  ...               6                   6
+
+[5 rows x 6 columns]
+2024-08-05 00:59:34,097 [INFO] [weekly_attendance_summary]  Filtered DataFrame with selected columns:
+   SEMESTER_ID  ...  ATTENDANCE_PCT
+0            1  ...       83.333333
+1            1  ...      100.000000
+2            1  ...      100.000000
+3            1  ...      100.000000
+4            1  ...      100.000000
+
+[5 rows x 4 columns]
+2024-08-05 00:59:34,132 [INFO] [weekly_attendance_summary]  Weekly attendance summary written to data/analytics/analytics_attendance_summary_weekly.parquet
+2024-08-05 00:59:34,133 [INFO] [export_data]  Exporting data from dim_course.parquet to CSV.
+2024-08-05 00:59:34,182 [INFO] [export_data]  Data exported to data/export/dim_course.csv
+2024-08-05 00:59:34,184 [INFO] [export_data]  Exporting data from dim_schedule.parquet to CSV.
+2024-08-05 00:59:34,227 [INFO] [export_data]  Data exported to data/export/dim_schedule.csv
+2024-08-05 00:59:34,228 [INFO] [export_data]  Exporting data from dim_enrollment.parquet to CSV.
+2024-08-05 00:59:34,268 [INFO] [export_data]  Data exported to data/export/dim_enrollment.csv
+2024-08-05 00:59:34,269 [INFO] [export_data]  Exporting data from fact_attendance_daily.parquet to CSV.
+2024-08-05 00:59:34,319 [INFO] [export_data]  Data exported to data/export/fact_attendance_daily.csv
+2024-08-05 00:59:34,320 [INFO] [export_data]  Exporting data from analytics_attendance_weekly.parquet to CSV.
+2024-08-05 00:59:34,371 [INFO] [export_data]  Data exported to data/export/analytics_attendance_weekly.csv
+2024-08-05 00:59:34,372 [INFO] [export_data]  Exporting data from analytics_attendance_summary_weekly.parquet to CSV.
+2024-08-05 00:59:34,410 [INFO] [export_data]  Data exported to data/export/analytics_attendance_summary_weekly.csv
+2024-08-05 01:05:34,329 [INFO] [pipeline]  Pipeline process started.
+2024-08-05 01:05:34,330 [INFO] [pipeline]  Loading configuration
+2024-08-05 01:05:34,339 [INFO] [pipeline]  Running pipeline with the following config
+2024-08-05 01:05:34,340 [INFO] [config]  WAREHOUSE_PATH: data/datamart
+2024-08-05 01:05:34,341 [INFO] [config]  EXPORT_DATA_PATH: data/export
+2024-08-05 01:05:34,342 [INFO] [config]  RAW_DATA_PATH: data/raw
+2024-08-05 01:05:34,343 [INFO] [config]  FOLDER_DATA: data
+2024-08-05 01:05:34,343 [INFO] [pipeline]  Preparing required directories
+2024-08-05 01:05:34,380 [INFO] [pipeline]  Raw data directory: data/raw
+2024-08-05 01:05:34,381 [INFO] [pipeline]  Export data directory: data/export
+2024-08-05 01:05:34,403 [INFO] [ingest_data]  Ingesting data from course.csv to Parquet.
+2024-08-05 01:05:34,612 [INFO] [ingest_data]  Data ingested to data/staging/stg_course.parquet
+2024-08-05 01:05:34,613 [INFO] [ingest_data]  Ingesting data from course_attendance.csv to Parquet.
+2024-08-05 01:05:34,655 [INFO] [ingest_data]  Data ingested to data/staging/stg_course_attendance.parquet
+2024-08-05 01:05:34,658 [INFO] [ingest_data]  Ingesting data from enrollment.csv to Parquet.
+2024-08-05 01:05:34,712 [INFO] [ingest_data]  Data ingested to data/staging/stg_enrollment.parquet
+2024-08-05 01:05:34,714 [INFO] [ingest_data]  Ingesting data from schedule.csv to Parquet.
+2024-08-05 01:05:34,776 [INFO] [ingest_data]  Data ingested to data/staging/stg_schedule.parquet
+2024-08-05 01:05:34,778 [INFO] [create_course_dimension]  Creating course dimension from data/staging/stg_course.parquet.
+2024-08-05 01:05:34,827 [INFO] [create_course_dimension]  Course dimension written to data/datamart/dim_course.parquet
+2024-08-05 01:05:34,828 [INFO] [create_schedule_dimension]  Creating schedule dimension from data/datamart/dim_schedule.parquet.
+2024-08-05 01:05:34,883 [INFO] [create_schedule_dimension]  Schedule dimension written to data/datamart/dim_schedule.parquet
+2024-08-05 01:05:34,883 [INFO] [create_enrollment_dimension]  Creating enrollment dimension from data/staging/stg_enrollment.parquet.
+2024-08-05 01:05:34,973 [INFO] [create_enrollment_dimension]  Enrollment dimension written to data/datamart/dim_enrollment.parquet
+2024-08-05 01:05:34,974 [INFO] [create_attendance_fact]  Creating attendance fact table from data/staging/stg_course_attendance.parquet.
+2024-08-05 01:05:35,051 [INFO] [create_attendance_fact]  Attendance fact table written to data/datamart/fact_attendance_daily.parquet
+2024-08-05 01:05:35,052 [INFO] [weekly_attendance_analysis]  Analyzing weekly attendance.
+2024-08-05 01:05:35,117 [INFO] [weekly_attendance_analysis]  Attendance DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT'],
+      dtype='object')
+2024-08-05 01:05:35,118 [INFO] [weekly_attendance_analysis]  Course DataFrame columns: Index(['COURSE_ID', 'COURSE_NAME'], dtype='object')
+2024-08-05 01:05:35,119 [INFO] [weekly_attendance_analysis]  Schedule DataFrame columns: Index(['SCHEDULE_ID', 'COURSE_ID', 'LECTURER_ID', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS'],
+      dtype='object')
+2024-08-05 01:05:35,120 [INFO] [weekly_attendance_analysis]  Enrollment DataFrame columns: Index(['ENROLLMENT_ID', 'SCHEDULE_ID', 'STUDENT_ID', 'LECTURER_ID',
+       'COURSE_ID', 'ACADEMIC_YEAR', 'SEMESTER_ID', 'ENROLL_DT'],
+      dtype='object')
+2024-08-05 01:05:35,124 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_START_DT is missing in attendance_df
+2024-08-05 01:05:35,124 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_END_DT is missing in attendance_df
+2024-08-05 01:05:35,139 [INFO] [weekly_attendance_analysis]  Merged DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT',
+       'COURSE_ID_schedule', 'LECTURER_ID_schedule', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS', 'SCHEDULE_ID_enrollment',
+       'STUDENT_ID_enrollment', 'LECTURER_ID_enrollment',
+       'COURSE_ID_enrollment', 'ACADEMIC_YEAR', 'SEMESTER_ID_enrollment',
+       'ENROLL_DT', 'COURSE_NAME'],
+      dtype='object')
+2024-08-05 01:05:35,220 [INFO] [weekly_attendance_analysis]  Weekly attendance analysis written to data/analytics/analytics_attendance_weekly.parquet
+2024-08-05 01:05:35,221 [INFO] [weekly_attendance_summary]  Summarizing weekly attendance from data/analytics/analytics_attendance_weekly.parquet.
+2024-08-05 01:05:35,246 [INFO] [weekly_attendance_summary]  Loaded DataFrame with columns: Index(['STUDENT_ID', 'SCHEDULE_ID', 'ENROLLMENT_ID', 'WEEK_ID', 'LECTURER_ID',
+       'SEMESTER_ID', 'COURSE_ID', 'COURSE_NAME', 'ACADEMIC_YEAR', 'ENROLL_DT',
+       'SCHEDULE_START_DT', 'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS',
+       'ATTENDANCE_EXPECTED', 'ATTENDANCE_SUM'],
+      dtype='object')
+2024-08-05 01:05:35,289 [INFO] [weekly_attendance_summary]  DataFrame preview:
+   STUDENT_ID  SCHEDULE_ID  ...  ATTENDANCE_EXPECTED  ATTENDANCE_SUM
+0           1            2  ...                    2               2
+1           1            2  ...                    2               2
+2           1            2  ...                    2               2
+3           1            2  ...                    2               2
+4           1            2  ...                    2               2
+
+[5 rows x 15 columns]
+2024-08-05 01:05:35,341 [INFO] [weekly_attendance_summary]  Aggregated DataFrame preview:
+   SEMESTER_ID  WEEK_ID  ...  ATTENDANCE_SUM ATTENDANCE_EXPECTED
+0            1        1  ...               5                   6
+1            1        1  ...               6                   6
+2            1        1  ...               4                   4
+3            1        1  ...               2                   2
+4            1        2  ...               6                   6
+
+[5 rows x 6 columns]
+2024-08-05 01:05:35,375 [INFO] [weekly_attendance_summary]  Filtered DataFrame with selected columns:
+   SEMESTER_ID  ...  ATTENDANCE_PCT
+0            1  ...       83.333333
+1            1  ...      100.000000
+2            1  ...      100.000000
+3            1  ...      100.000000
+4            1  ...      100.000000
+
+[5 rows x 4 columns]
+2024-08-05 01:05:35,414 [INFO] [weekly_attendance_summary]  Weekly attendance summary written to data/analytics/analytics_attendance_summary_weekly.parquet
+2024-08-05 01:05:35,418 [INFO] [export_data]  Exporting data from dim_course.parquet to CSV.
+2024-08-05 01:05:35,461 [INFO] [export_data]  Data exported to data/export/dim_course.csv
+2024-08-05 01:05:35,462 [INFO] [export_data]  Exporting data from dim_schedule.parquet to CSV.
+2024-08-05 01:05:35,498 [INFO] [export_data]  Data exported to data/export/dim_schedule.csv
+2024-08-05 01:05:35,498 [INFO] [export_data]  Exporting data from dim_enrollment.parquet to CSV.
+2024-08-05 01:05:35,535 [INFO] [export_data]  Data exported to data/export/dim_enrollment.csv
+2024-08-05 01:05:35,535 [INFO] [export_data]  Exporting data from fact_attendance_daily.parquet to CSV.
+2024-08-05 01:05:35,574 [INFO] [export_data]  Data exported to data/export/fact_attendance_daily.csv
+2024-08-05 01:05:35,576 [INFO] [export_data]  Exporting data from analytics_attendance_weekly.parquet to CSV.
+2024-08-05 01:05:35,618 [INFO] [export_data]  Data exported to data/export/analytics_attendance_weekly.csv
+2024-08-05 01:05:35,619 [INFO] [export_data]  Exporting data from analytics_attendance_summary_weekly.parquet to CSV.
+2024-08-05 01:05:35,657 [INFO] [export_data]  Data exported to data/export/analytics_attendance_summary_weekly.csv
+2024-08-05 01:07:46,735 [INFO] [pipeline]  Pipeline process started.
+2024-08-05 01:07:46,736 [INFO] [pipeline]  Loading configuration
+2024-08-05 01:07:46,742 [INFO] [pipeline]  Running pipeline with the following config
+2024-08-05 01:07:46,742 [INFO] [config]  WAREHOUSE_PATH: data/datamart
+2024-08-05 01:07:46,743 [INFO] [config]  EXPORT_DATA_PATH: data/export
+2024-08-05 01:07:46,744 [INFO] [config]  RAW_DATA_PATH: data/raw
+2024-08-05 01:07:46,745 [INFO] [config]  FOLDER_DATA: data
+2024-08-05 01:07:46,745 [INFO] [pipeline]  Preparing required directories
+2024-08-05 01:07:46,769 [INFO] [pipeline]  Raw data directory: data/raw
+2024-08-05 01:07:46,770 [INFO] [pipeline]  Export data directory: data/export
+2024-08-05 01:07:46,787 [INFO] [ingest_data]  Ingesting data from course.csv to Parquet.
+2024-08-05 01:07:46,992 [INFO] [ingest_data]  Data ingested to data/staging/stg_course.parquet
+2024-08-05 01:07:46,993 [INFO] [ingest_data]  Ingesting data from course_attendance.csv to Parquet.
+2024-08-05 01:07:47,035 [INFO] [ingest_data]  Data ingested to data/staging/stg_course_attendance.parquet
+2024-08-05 01:07:47,036 [INFO] [ingest_data]  Ingesting data from enrollment.csv to Parquet.
+2024-08-05 01:07:47,128 [INFO] [ingest_data]  Data ingested to data/staging/stg_enrollment.parquet
+2024-08-05 01:07:47,130 [INFO] [ingest_data]  Ingesting data from schedule.csv to Parquet.
+2024-08-05 01:07:47,190 [INFO] [ingest_data]  Data ingested to data/staging/stg_schedule.parquet
+2024-08-05 01:07:47,191 [INFO] [create_course_dimension]  Creating course dimension from data/staging/stg_course.parquet.
+2024-08-05 01:07:47,249 [INFO] [create_course_dimension]  Course dimension written to data/datamart/dim_course.parquet
+2024-08-05 01:07:47,250 [INFO] [create_schedule_dimension]  Creating schedule dimension from data/datamart/dim_schedule.parquet.
+2024-08-05 01:07:47,308 [INFO] [create_schedule_dimension]  Schedule dimension written to data/datamart/dim_schedule.parquet
+2024-08-05 01:07:47,310 [INFO] [create_enrollment_dimension]  Creating enrollment dimension from data/staging/stg_enrollment.parquet.
+2024-08-05 01:07:47,416 [INFO] [create_enrollment_dimension]  Enrollment dimension written to data/datamart/dim_enrollment.parquet
+2024-08-05 01:07:47,418 [INFO] [create_attendance_fact]  Creating attendance fact table from data/staging/stg_course_attendance.parquet.
+2024-08-05 01:07:47,514 [INFO] [create_attendance_fact]  Attendance fact table written to data/datamart/fact_attendance_daily.parquet
+2024-08-05 01:07:47,515 [INFO] [weekly_attendance_analysis]  Analyzing weekly attendance.
+2024-08-05 01:07:47,584 [INFO] [weekly_attendance_analysis]  Attendance DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT'],
+      dtype='object')
+2024-08-05 01:07:47,585 [INFO] [weekly_attendance_analysis]  Course DataFrame columns: Index(['COURSE_ID', 'COURSE_NAME'], dtype='object')
+2024-08-05 01:07:47,588 [INFO] [weekly_attendance_analysis]  Schedule DataFrame columns: Index(['SCHEDULE_ID', 'COURSE_ID', 'LECTURER_ID', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS'],
+      dtype='object')
+2024-08-05 01:07:47,590 [INFO] [weekly_attendance_analysis]  Enrollment DataFrame columns: Index(['ENROLLMENT_ID', 'SCHEDULE_ID', 'STUDENT_ID', 'LECTURER_ID',
+       'COURSE_ID', 'ACADEMIC_YEAR', 'SEMESTER_ID', 'ENROLL_DT'],
+      dtype='object')
+2024-08-05 01:07:47,595 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_START_DT is missing in attendance_df
+2024-08-05 01:07:47,596 [ERROR] [weekly_attendance_analysis]  Column SCHEDULE_END_DT is missing in attendance_df
+2024-08-05 01:07:47,619 [INFO] [weekly_attendance_analysis]  Merged DataFrame columns: Index(['ATTENDANCE_ID', 'STUDENT_ID', 'ENROLLMENT_ID', 'SCHEDULE_ID',
+       'LECTURER_ID', 'COURSE_ID', 'SEMESTER_ID', 'ATTEND_DT',
+       'COURSE_ID_schedule', 'LECTURER_ID_schedule', 'SCHEDULE_START_DT',
+       'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS', 'SCHEDULE_ID_enrollment',
+       'STUDENT_ID_enrollment', 'LECTURER_ID_enrollment',
+       'COURSE_ID_enrollment', 'ACADEMIC_YEAR', 'SEMESTER_ID_enrollment',
+       'ENROLL_DT', 'COURSE_NAME'],
+      dtype='object')
+2024-08-05 01:07:47,712 [INFO] [weekly_attendance_analysis]  Weekly attendance analysis written to data/analytics/analytics_attendance_weekly.parquet
+2024-08-05 01:07:47,713 [INFO] [weekly_attendance_summary]  Summarizing weekly attendance from data/analytics/analytics_attendance_weekly.parquet.
+2024-08-05 01:07:47,741 [INFO] [weekly_attendance_summary]  Loaded DataFrame with columns: Index(['STUDENT_ID', 'SCHEDULE_ID', 'ENROLLMENT_ID', 'WEEK_ID', 'LECTURER_ID',
+       'SEMESTER_ID', 'COURSE_ID', 'COURSE_NAME', 'ACADEMIC_YEAR', 'ENROLL_DT',
+       'SCHEDULE_START_DT', 'SCHEDULE_END_DT', 'SCHEDULE_COURSE_DAYS',
+       'ATTENDANCE_EXPECTED', 'ATTENDANCE_SUM'],
+      dtype='object')
+2024-08-05 01:07:47,785 [INFO] [weekly_attendance_summary]  DataFrame preview:
+   STUDENT_ID  SCHEDULE_ID  ...  ATTENDANCE_EXPECTED  ATTENDANCE_SUM
+0           1            2  ...                    2               2
+1           1            2  ...                    2               2
+2           1            2  ...                    2               2
+3           1            2  ...                    2               2
+4           1            2  ...                    2               2
+
+[5 rows x 15 columns]
+2024-08-05 01:07:47,824 [INFO] [weekly_attendance_summary]  Aggregated DataFrame preview:
+   SEMESTER_ID  WEEK_ID  ...  ATTENDANCE_SUM ATTENDANCE_EXPECTED
+0            1        1  ...               5                   6
+1            1        1  ...               6                   6
+2            1        1  ...               4                   4
+3            1        1  ...               2                   2
+4            1        2  ...               6                   6
+
+[5 rows x 6 columns]
+2024-08-05 01:07:47,850 [INFO] [weekly_attendance_summary]  Filtered DataFrame with selected columns:
+   SEMESTER_ID  ...  ATTENDANCE_PCT
+0            1  ...       83.333333
+1            1  ...      100.000000
+2            1  ...      100.000000
+3            1  ...      100.000000
+4            1  ...      100.000000
+
+[5 rows x 4 columns]
+2024-08-05 01:07:47,892 [INFO] [weekly_attendance_summary]  Weekly attendance summary written to data/analytics/analytics_attendance_summary_weekly.parquet
+2024-08-05 01:07:47,894 [INFO] [export_data]  Exporting data from dim_course.parquet to CSV.
+2024-08-05 01:07:47,945 [INFO] [export_data]  Data exported to data/export/dim_course.csv
+2024-08-05 01:07:47,948 [INFO] [export_data]  Exporting data from dim_schedule.parquet to CSV.
+2024-08-05 01:07:48,027 [INFO] [export_data]  Data exported to data/export/dim_schedule.csv
+2024-08-05 01:07:48,028 [INFO] [export_data]  Exporting data from dim_enrollment.parquet to CSV.
+2024-08-05 01:07:48,083 [INFO] [export_data]  Data exported to data/export/dim_enrollment.csv
+2024-08-05 01:07:48,085 [INFO] [export_data]  Exporting data from fact_attendance_daily.parquet to CSV.
+2024-08-05 01:07:48,151 [INFO] [export_data]  Data exported to data/export/fact_attendance_daily.csv
+2024-08-05 01:07:48,154 [INFO] [export_data]  Exporting data from analytics_attendance_weekly.parquet to CSV.
+2024-08-05 01:07:48,208 [INFO] [export_data]  Data exported to data/export/analytics_attendance_weekly.csv
+2024-08-05 01:07:48,209 [INFO] [export_data]  Exporting data from analytics_attendance_summary_weekly.parquet to CSV.
+2024-08-05 01:07:48,280 [INFO] [export_data]  Data exported to data/export/analytics_attendance_summary_weekly.csv
