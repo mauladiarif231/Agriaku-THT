@@ -31,30 +31,6 @@ To run this project, you will need the following:
    ```bash
    pip install -r requirements.txt
    ```
-
-## Usage
-
-To run the ETL pipeline, follow these steps:
-
-1. **Ingest Data:**
-   - Place the raw data files in the `data/raw` directory.
-   - Run the ingestion script to load the data.
-   ```bash
-   python scripts/ingest.py
-   ```
-
-2. **Transform Data:**
-   - Run the transformation script to clean and process the data.
-   ```bash
-   python scripts/transform.py
-   ```
-
-3. **Store Data:**
-   - The processed data will be stored in the `data/staging` and `data/datamart` directories.
-
-4. **Additional Information:**
-   - You can find the details of the schema and data structure in the `docs` directory.
-
 ## Project Structure
 
 ```
@@ -87,9 +63,28 @@ Agriaku-THT/
 └── run.sh                          # Script to run the project
 ```
 
-## Contributing
+## Usage
 
-If you would like to contribute to this project, please fork the repository and submit a pull request.
+To run the ETL pipeline, follow these steps:
+
+1. **Ingest Data:**
+   - Place the raw data files in the `data/raw` directory.
+   - Run the ingestion script to load the data.
+   ```bash
+   python scripts/ingest.py
+   ```
+
+2. **Transform Data:**
+   - Run the transformation script to clean and process the data.
+   ```bash
+   python scripts/transform.py
+   ```
+
+3. **Store Data:**
+   - The processed data will be stored in the `data/staging` and `data/datamart` directories.
+
+4. **Additional Information:**
+   - You can find the details of the schema and data structure in the `docs` directory.
 
 ## License
 
