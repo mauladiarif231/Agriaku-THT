@@ -77,7 +77,7 @@ To run the pipeline, use the following command:
 $ python3 pipeline.py
 ```
 
-The warehouse tables can be found inside the `data/warehouse/` directory, while the final CSV files can be found inside `data/exported-data/`.
+The warehouse tables can be found inside the `data/analytics`, `data/datamart`, `data/staging` directory, while the final CSV files can be found inside `data/export/`.
 
 ```
 .
@@ -121,22 +121,16 @@ The warehouse tables can be found inside the `data/warehouse/` directory, while 
 
 Before running with Docker, please make sure that the datasets are inside the `data/raw/` directory as shown in the directory tree above.
 
-1. **Build Docker Image:**
+1. **Build Docker Image & Run Docker Container:**
    - Make sure Docker is installed on your machine.
-   - Navigate to the project directory and build the Docker image using the prepared script:
-
-     ```bash
-     $ ./docker/build-docker.sh
-     ```
-
-2. **Run Docker Container:**
+   - Navigate to the project directory and build the Docker image using the prepared script.
    - Use the provided `run.sh` script to run the Docker container and execute the ETL pipeline:
 
      ```bash
-     $ ./docker/run-docker.sh
+     $ ./run.sh
      ```
 
-You should be able to find the results inside the `docker_volume/` directory that has been created by the run script.
+You should be able to find the results inside the `docker/` directory that has been created by the run script.
 
 ```
 .
@@ -146,7 +140,15 @@ You should be able to find the results inside the `docker_volume/` directory tha
 │   │   ├── course.csv
 │   │   ├── enrollment.csv
 │   │   └── schedule.csv
-├── docker_volume/
+├── docker/
+│   ├── analytics
+│   │   │   ├── analytics_attendance_summary_weekly.parquet
+│   │   │   └── analytics_attendance_weekly.parquet
+│   ├── datamart
+│   │   │   ├── dim_course.parquet
+│   │   │   ├── dim_enrollment.parquet
+│   │   │   ├── dim_schedule.parquet
+│   │   │   └── fact_attendance_daily.parquet
 │   ├── exported-data
 │   │   ├── analytics_attendance_summary_weekly.csv
 │   │   ├── analytics_attendance_weekly.csv
@@ -154,28 +156,19 @@ You should be able to find the results inside the `docker_volume/` directory tha
 │   │   ├── dim_enrollment.csv
 │   │   ├── dim_schedule.csv
 │   │   └── fact_attendance_daily.csv
-│   ├── warehouse
-│   │   ├── analytics
-│   │   │   ├── analytics_attendance_summary_weekly.parquet
-│   │   │   └── analytics_attendance_weekly.parquet
-│   │   ├── datamart
-│   │   │   ├── dim_course.parquet
-│   │   │   ├── dim_enrollment.parquet
-│   │   │   ├── dim_schedule.parquet
-│   │   │   └── fact_attendance_daily.parquet
-│   │   └── staging
+│   ├── staging
 │   │       ├── stg_course_attendance.parquet
 │   │       ├── stg_course.parquet
 │   │       ├── stg_enrollment.parquet
 │   │       └── stg_schedule.parquet
-├── docker/
 ├── pipeline/
-├── venv/
 ├── pipeline_conf.yml
+├── Dockerfile
 ├── README.md
-├── LICENSE
+├── docker-compose.yml
+├── pipeline.py
 ├── requirements.txt
-└── run_pipeline.py
+└── run.sh     
 ```
 
 These instructions provide a clear guide for running the ETL pipeline both on a local machine and within a Docker container, ensuring users can choose their preferred method.
