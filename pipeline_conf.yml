@@ -1,0 +1,4 @@
+# pipeline_conf.yml
+WAREHOUSE_PATH: "data/datamart"
+EXPORT_DATA_PATH: "data/export"
+RAW_DATA_PATH: "data/raw"
