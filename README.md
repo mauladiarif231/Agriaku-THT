@@ -62,9 +62,6 @@ Agriaku-THT/
 ├── requirements.txt                # Python package dependencies
 └── run.sh                          # Script to run the project
 ```
-
-Here's how you can update the usage instructions to match the structure and setup of your project:
-
 ---
 
 ### Running the Pipeline on Local Machine
